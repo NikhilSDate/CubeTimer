@@ -15,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Locale;
 
-//git test
+
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView mainNav;
     @Override

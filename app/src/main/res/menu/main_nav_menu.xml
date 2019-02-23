@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id='@+id/timer'
+        android:icon='@drawable/ic_av_timer_black_24dp'
+        android:title="Timer"
+        />
+    <item
+        android:id='@+id/log'
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:title="Log"/>
+    <item
+        android:id='@+id/training'
+        android:title="Training"/>
+    <item
+        android:id='@+id/settings'
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_black_24dp"/>
+
+
+</menu>

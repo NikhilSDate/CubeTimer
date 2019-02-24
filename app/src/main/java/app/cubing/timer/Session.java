@@ -58,6 +58,9 @@ public class Session {
     public void editSolve(int code,Solve solve){
         solves.put(code,solve);
     }
+    public Solve getSolve(int code){
+        return solves.get(code);
+    }
     public int getCount(){
         return solves.size();
     }

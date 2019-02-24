@@ -125,8 +125,9 @@ public class Utils {
                 return Solve.PENALTY_NONE;
             }
         }
-        public static void modifySolvePenalty(Context context,Session session, int code, float time, int penalty){
-            Solve solve=new Solve(time,penalty);
+        public static void modifySolvePenalty(Context context,Session session, int code, int penalty){
+            Solve solve=session.getSolve(code);
+            solve.setPenalty(penalty);
             session.editSolve(code,solve);
             Sessions.getSingletonInstance().editSession(session);
             Sessions.getSingletonInstance().writeToFile(context);

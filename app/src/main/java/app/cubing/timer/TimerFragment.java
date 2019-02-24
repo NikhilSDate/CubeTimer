@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.gnehzr.tnoodle.scrambles.InvalidScrambleException;
 import net.gnehzr.tnoodle.scrambles.Puzzle;
@@ -114,14 +115,16 @@ public class TimerFragment extends Fragment  {
                 if(!isPlusTwo){
                     Log.i("TAG","PlusTwo clicked");
                     isPlusTwo=true;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+                    isDNF=false;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
                     plusTwo.setTextColor(Color.BLACK);
                     plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
                     dnf.setTextColor(Color.WHITE);
                     dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                 }else{
                     isPlusTwo=false;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+                    isDNF=false;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
 
                     plusTwo.setTextColor(Color.WHITE);
                     plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
@@ -134,7 +137,8 @@ public class TimerFragment extends Fragment  {
                 if(!isDNF){
                     Log.i("TAG","dnf clicked");
                     isDNF=true;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+                    isPlusTwo=true;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
 
                     dnf.setTextColor(Color.BLACK);
                     dnf.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
@@ -142,7 +146,8 @@ public class TimerFragment extends Fragment  {
                     plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                 }else{
                     isDNF=false;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+                    isPlusTwo=false;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
 
                     dnf.setTextColor(Color.WHITE);
                     dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
@@ -167,7 +172,7 @@ public class TimerFragment extends Fragment  {
 
 
     public void showDialog(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setMessage("It seems that you don't have a session for "+Utils.getPuzzleTypeName(currentPuzzleType)+"."+"Let's create a session now.");
         builder.setTitle("No Session");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -190,9 +195,7 @@ public class TimerFragment extends Fragment  {
 
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        builder.show();
 
     }
     public View.OnTouchListener listener = new View.OnTouchListener() {
@@ -296,6 +299,13 @@ public class TimerFragment extends Fragment  {
 
            }
     public void timingHandler(){
+        isPlusTwo=false;
+        plusTwo.setTextColor(Color.WHITE);
+        plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+
+        isDNF=false;
+        dnf.setTextColor(Color.WHITE);
+        dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
         final long time=System.currentTimeMillis();
         final Handler handler=new Handler();
         final Runnable timingRunnable;
@@ -323,7 +333,10 @@ public class TimerFragment extends Fragment  {
 
     }
     public void afterSolveHandler(){
-        Solve solve=new Solve(elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+
+
+
+        Solve solve=new Solve(elapsedTime,Solve.PENALTY_NONE);
         currentSolveCode=currentSession.addSolve(solve);
         Sessions.getSingletonInstance().editSession(currentSession);
         Sessions.getSingletonInstance().writeToFile(getContext());

@@ -161,7 +161,7 @@ public class TimerFragment extends Fragment  {
 
     public void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("It seems that you don't have a session for "+currentPuzzleType+"."+"Let's create a session now.");
+        builder.setMessage("It seems that you don't have a session for "+Utils.getPuzzleTypeName(currentPuzzleType)+"."+"Let's create a session now.");
         builder.setTitle("No Session");
         builder.setCancelable(false);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

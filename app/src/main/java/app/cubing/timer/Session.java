@@ -61,6 +61,9 @@ public class Session {
     public Solve getSolve(int code){
         return solves.get(code);
     }
+    public void removeSolve(int code){
+        solves.remove(code);
+    }
     public int getCount(){
         return solves.size();
     }

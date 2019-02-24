@@ -50,7 +50,7 @@ public class TimerFragment extends Fragment  {
     Session currentSession;
     boolean isDNF;
     boolean isPlusTwo;
-    int currentSolveCode;
+    int currentSolveCode=-1;
 
 
     Spinner puzzleType;
@@ -58,6 +58,7 @@ public class TimerFragment extends Fragment  {
     TextView timer;
     MaterialButton plusTwo;
     MaterialButton dnf;
+    MaterialButton delete;
 
     public TimerFragment() {
 
@@ -112,46 +113,69 @@ public class TimerFragment extends Fragment  {
         plusTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isPlusTwo){
-                    Log.i("TAG","PlusTwo clicked");
-                    isPlusTwo=true;
-                    isDNF=false;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
-                    plusTwo.setTextColor(Color.BLACK);
-                    plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                    dnf.setTextColor(Color.WHITE);
-                    dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
-                }else{
-                    isPlusTwo=false;
-                    isDNF=false;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
+                if (currentSolveCode != -1) {
+                    if (!isPlusTwo) {
+                        Log.i("TAG", "PlusTwo clicked");
+                        isPlusTwo = true;
+                        isDNF = false;
+                        Utils.modifySolvePenalty(getContext(), currentSession, currentSolveCode, Utils.getPenalty(isPlusTwo, isDNF));
+                        plusTwo.setTextColor(Color.BLACK);
+                        plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                        dnf.setTextColor(Color.WHITE);
+                        dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                    } else {
+                        isPlusTwo = false;
+                        isDNF = false;
+                        Utils.modifySolvePenalty(getContext(), currentSession, currentSolveCode, Utils.getPenalty(isPlusTwo, isDNF));
 
-                    plusTwo.setTextColor(Color.WHITE);
-                    plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                        plusTwo.setTextColor(Color.WHITE);
+                        plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                    }
                 }
             }
         });
+
         dnf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isDNF){
-                    Log.i("TAG","dnf clicked");
-                    isDNF=true;
-                    isPlusTwo=true;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
+                if (currentSolveCode != -1) {
+                    if (!isDNF) {
+                        Log.i("TAG", "dnf clicked");
+                        isDNF = true;
+                        isPlusTwo = false;
+                        Utils.modifySolvePenalty(getContext(), currentSession, currentSolveCode, Utils.getPenalty(isPlusTwo, isDNF));
 
-                    dnf.setTextColor(Color.BLACK);
-                    dnf.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                    plusTwo.setTextColor(Color.WHITE);
-                    plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
-                }else{
-                    isDNF=false;
-                    isPlusTwo=false;
-                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,Utils.getPenalty(isPlusTwo,isDNF));
+                        dnf.setTextColor(Color.BLACK);
+                        dnf.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                        plusTwo.setTextColor(Color.WHITE);
+                        plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                    } else {
+                        isDNF = false;
+                        isPlusTwo = false;
+                        Utils.modifySolvePenalty(getContext(), currentSession, currentSolveCode, Utils.getPenalty(isPlusTwo, isDNF));
 
-                    dnf.setTextColor(Color.WHITE);
-                    dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                        dnf.setTextColor(Color.WHITE);
+                        dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                    }
                 }
+            }
+        });
+        delete=view.findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timer.setText("0.00");
+
+                currentSession.removeSolve(currentSolveCode);
+                currentSolveCode=-1;
+
+                isPlusTwo=false;
+                plusTwo.setTextColor(Color.WHITE);
+                plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+
+                isDNF=false;
+                dnf.setTextColor(Color.WHITE);
+                dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
             }
         });
         if(getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null)!=null){

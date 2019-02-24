@@ -308,6 +308,9 @@ public class TimerFragment extends Fragment  {
     }
     public void afterSolveHandler(){
         Solve solve=new Solve(elapsedTime,currentPenalty);
+        currentSession.addSolve(solve);
+        Sessions.getSingletonInstance().editSession(currentSession);
+        Sessions.getSingletonInstance().writeToFile(getContext());
 
 
 

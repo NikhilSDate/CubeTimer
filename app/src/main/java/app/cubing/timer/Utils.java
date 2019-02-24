@@ -1,5 +1,7 @@
 package app.cubing.timer;
 
+import android.content.Context;
+
 import net.gnehzr.tnoodle.scrambles.Puzzle;
 
 import java.text.DecimalFormat;
@@ -113,6 +115,23 @@ public class Utils {
 
 
             }
+        }
+        public static int getPenalty(boolean isPlusTwo,boolean isDNF){
+            if(isPlusTwo){
+                return Solve.PENALTY_PLUSTWO;
+            }else if(isDNF){
+                return  Solve.PENALTY_DNF;
+            }else{
+                return Solve.PENALTY_NONE;
+            }
+        }
+        public static void modifySolvePenalty(Context context,Session session, int code, float time, int penalty){
+            Solve solve=new Solve(time,penalty);
+            session.editSolve(code,solve);
+            Sessions.getSingletonInstance().editSession(session);
+            Sessions.getSingletonInstance().writeToFile(context);
+
+
         }
 }
 

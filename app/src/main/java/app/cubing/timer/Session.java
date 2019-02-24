@@ -46,14 +46,17 @@ public class Session {
     }
 
 
-    public void addSolve(Solve s){
+    public int addSolve(Solve s){
         Integer code=solves.size();
         while(solves.containsKey(code)){
             code=code+1;
         }
         solves.put(code,s);
+        return code;
 
-
+    }
+    public void editSolve(int code,Solve solve){
+        solves.put(code,solve);
     }
     public int getCount(){
         return solves.size();

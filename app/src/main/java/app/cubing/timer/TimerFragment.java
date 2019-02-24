@@ -2,7 +2,6 @@ package app.cubing.timer;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -18,14 +17,11 @@ import puzzle.ThreeByThreeCubePuzzle;
 
 
 import android.os.Handler;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,9 +45,11 @@ public class TimerFragment extends Fragment  {
     boolean isInspectionEnabled;
     boolean isGreen=false;
     float elapsedTime;
-    int currentPenalty=Solve.PENALTY_NONE;
     int currentPuzzleType;
     Session currentSession;
+    boolean isDNF;
+    boolean isPlusTwo;
+    int currentSolveCode;
 
 
     Spinner puzzleType;
@@ -113,16 +111,18 @@ public class TimerFragment extends Fragment  {
         plusTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentPenalty==Solve.PENALTY_NONE||currentPenalty==Solve.PENALTY_DNF){
+                if(!isPlusTwo){
                     Log.i("TAG","PlusTwo clicked");
-
-                    currentPenalty=Solve.PENALTY_PLUSTWO;
+                    isPlusTwo=true;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
                     plusTwo.setTextColor(Color.BLACK);
                     plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
                     dnf.setTextColor(Color.WHITE);
                     dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                 }else{
-                    currentPenalty=Solve.PENALTY_NONE;
+                    isPlusTwo=false;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+
                     plusTwo.setTextColor(Color.WHITE);
                     plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                 }
@@ -131,15 +131,19 @@ public class TimerFragment extends Fragment  {
         dnf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentPenalty==Solve.PENALTY_NONE||currentPenalty==Solve.PENALTY_PLUSTWO){
+                if(!isDNF){
                     Log.i("TAG","dnf clicked");
-                    currentPenalty=Solve.PENALTY_DNF;
+                    isDNF=true;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+
                     dnf.setTextColor(Color.BLACK);
                     dnf.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
                     plusTwo.setTextColor(Color.WHITE);
                     plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                 }else{
-                    currentPenalty=Solve.PENALTY_NONE;
+                    isDNF=false;
+                    Utils.modifySolvePenalty(getContext(),currentSession,currentSolveCode,elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+
                     dnf.setTextColor(Color.WHITE);
                     dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                 }
@@ -180,6 +184,7 @@ public class TimerFragment extends Fragment  {
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("currentSession",session.getName());
+                editor.apply();
 
                 dialog.dismiss();
 
@@ -318,11 +323,11 @@ public class TimerFragment extends Fragment  {
 
     }
     public void afterSolveHandler(){
-        Solve solve=new Solve(elapsedTime,currentPenalty);
-        currentSession.addSolve(solve);
+        Solve solve=new Solve(elapsedTime,Utils.getPenalty(isPlusTwo,isDNF));
+        currentSolveCode=currentSession.addSolve(solve);
         Sessions.getSingletonInstance().editSession(currentSession);
         Sessions.getSingletonInstance().writeToFile(getContext());
-
+        Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
 
 
     }

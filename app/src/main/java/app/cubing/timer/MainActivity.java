@@ -23,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
+        Sessions.getSingletonInstance().getFromFile(this);
         mainNav=findViewById(R.id.mainNav);
         TimerFragment t = new TimerFragment();
         Bundle bundle=new Bundle();

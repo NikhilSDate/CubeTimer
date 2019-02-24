@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.PictureDrawable;
@@ -175,8 +176,11 @@ public class TimerFragment extends Fragment  {
                 Sessions.getSingletonInstance().addSession(session);
                 Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
                 Sessions.getSingletonInstance().writeToFile(getContext());
-                currentSession=Sessions.getSingletonInstance().getSessionsMap().get("Default 3x3 session");
-                Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
+                currentSession=session;
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("currentSession",session.getName());
+
                 dialog.dismiss();
 
             }

@@ -150,7 +150,9 @@ public class TimerFragment extends Fragment  {
         }else{
             currentPuzzleType=Session.TYPE_3X3;
             showDialog();
-            currentSession=Sessions.getSingletonInstance().getSessionsMap().get("Default 3x3 session");
+
+
+
 
         }
 
@@ -160,24 +162,29 @@ public class TimerFragment extends Fragment  {
 
 
     public void showDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("It seems that you don't have a session for "+Utils.getPuzzleTypeName(currentPuzzleType)+"."+"Let's create a session now.");
         builder.setTitle("No Session");
-        builder.setCancelable(false);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Session session = new Session();
                 session.setName("Default "+Utils.getPuzzleTypeName(currentPuzzleType)+" session");
                 session.setType(currentPuzzleType);
+
                 Sessions.getSingletonInstance().addSession(session);
+                Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
                 Sessions.getSingletonInstance().writeToFile(getContext());
+                currentSession=Sessions.getSingletonInstance().getSessionsMap().get("Default 3x3 session");
+                Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
+                dialog.dismiss();
+
             }
         });
         AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+
     }
     public View.OnTouchListener listener = new View.OnTouchListener() {
         @Override

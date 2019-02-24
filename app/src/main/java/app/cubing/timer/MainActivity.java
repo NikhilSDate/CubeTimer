@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Sessions.getSingletonInstance().writeToFile(this);
         Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
         mainNav=findViewById(R.id.mainNav);
         TimerFragment t = new TimerFragment();

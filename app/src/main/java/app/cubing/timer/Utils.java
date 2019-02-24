@@ -83,7 +83,7 @@ public class Utils {
                 return secondsAndMilliseconds;
             }
         }
-        public String getPuzzleTypeName(int puzzleTypeInt){
+        public static String getPuzzleTypeName(int puzzleTypeInt){
             switch(puzzleTypeInt){
                 case Session.TYPE_2X2:
                     return "2x2";
@@ -93,8 +93,23 @@ public class Utils {
                     return "4X4";
                 case Session.TYPE_5X5:
                     return "5x5";
-                    case Session.TYPE_6X6:
-                        return "6x6";
+                case Session.TYPE_6X6:
+                    return "6x6";
+                case Session.TYPE_7X7:
+                    return "7x7";
+                case Session.TYPE_PYRAMINX:
+                    return "Pyra";
+                case Session.TYPE_SKEWB:
+                    return "Skewb";
+                case Session.TYPE_MEGAMINX:
+                    return "Mega";
+                case Session.TYPE_SQUARE1:
+                    return "SQ1";
+                case Session.TYPE_CLOCK:
+                    return "Clock";
+                default:
+                    return "";
+
 
 
             }

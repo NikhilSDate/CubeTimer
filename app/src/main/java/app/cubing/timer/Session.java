@@ -9,8 +9,21 @@ import static java.lang.Float.NaN;
 
 
 public class Session {
+    final static int TYPE_2X2=0;
+    final static int TYPE_3X3=1;
+    final static int TYPE_4X4=2;
+    final static int TYPE_5X5=3;
+    final static int TYPE_6X6=4;
+    final static int TYPE_7X7=5;
+    final static int TYPE_PYRAMINX=6;
+    final static int TYPE_SKEWB=7;
+    final static int TYPE_SQUARE1=8;
+    final static int TYPE_MEGAMINX=9;
+    final static int TYPE_CLOCK=10;
+
+
     private String name;
-    private String type;
+    private int type;
     private LinkedHashMap<Integer,Solve> solves =new LinkedHashMap<Integer, Solve>();
     public Session(){
 
@@ -24,13 +37,14 @@ public class Session {
         this.name = name;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
+
 
     public void addSolve(Solve s){
         Integer code=solves.size();
@@ -231,7 +245,7 @@ public class Session {
         Session session=new Session();
         String[] tokens = str.split("~");
         session.name=tokens[0];
-        session.type=tokens[1];
+        session.type=Integer.parseInt(tokens[1]);
         for(int i=4;i<tokens.length;i+=3){
             int code=Integer.parseInt(tokens[i-2]);
             float time=Float.parseFloat(tokens[i-1]);

@@ -3,6 +3,7 @@ package app.cubing.timer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -35,11 +36,7 @@ import com.google.android.material.button.MaterialButton;
 
 import net.gnehzr.tnoodle.scrambles.InvalidScrambleException;
 import net.gnehzr.tnoodle.scrambles.Puzzle;
-import net.gnehzr.tnoodle.svglite.Svg;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 
 public class TimerFragment extends Fragment  {
@@ -52,17 +49,18 @@ public class TimerFragment extends Fragment  {
     boolean isGreen=false;
     float elapsedTime;
     int currentPenalty=Solve.PENALTY_NONE;
-
+    int currentPuzzleType;
+    Session currentSession;
 
 
     Spinner puzzleType;
-    String currentPuzzleType="2x2x2";
     TextView scramble;
     TextView timer;
     MaterialButton plusTwo;
     MaterialButton dnf;
 
     public TimerFragment() {
+
     }
 
 
@@ -92,9 +90,7 @@ public class TimerFragment extends Fragment  {
         } catch (InvalidScrambleException e) {
             e.printStackTrace();
         }
-        if(!checkSession()){
-            showDialog();
-        }
+
 
     }
     public void initialize(View view){
@@ -148,17 +144,21 @@ public class TimerFragment extends Fragment  {
                 }
             }
         });
+        if(getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null)!=null){
+            currentSession=Sessions.getSingletonInstance().getSessionsMap().get(
+                    getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null));
+        }else{
+            currentPuzzleType=Session.TYPE_3X3;
+            showDialog();
+            currentSession=Sessions.getSingletonInstance().getSessionsMap().get("Default 3x3 session");
 
-
-    }
-    public boolean checkSession(){
-        for(Session s:Sessions.getSingletonInstance().getSessionsMap().values()){
-            if(s.getType().equals(currentPuzzleType)){
-                return true;
-            }
         }
-        return false;
+
+
+
     }
+
+
     public void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("It seems that you don't have a session for "+currentPuzzleType+"."+"Let's create a session now.");
@@ -167,7 +167,11 @@ public class TimerFragment extends Fragment  {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                Session session = new Session();
+                session.setName("Default "+Utils.getPuzzleTypeName(currentPuzzleType)+" session");
+                session.setType(currentPuzzleType);
+                Sessions.getSingletonInstance().addSession(session);
+                Sessions.getSingletonInstance().writeToFile(getContext());
             }
         });
         AlertDialog dialog = builder.create();
@@ -303,8 +307,9 @@ public class TimerFragment extends Fragment  {
 
     }
     public void afterSolveHandler(){
-        Solve solve=new Solve(elapsedTime,Solve.PENALTY_NONE);
-        Log.i("TAG",String.valueOf(solve.getTime()));
+        Solve solve=new Solve(elapsedTime,currentPenalty);
+
+
 
     }
 

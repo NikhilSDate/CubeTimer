@@ -83,5 +83,21 @@ public class Utils {
                 return secondsAndMilliseconds;
             }
         }
+        public String getPuzzleTypeName(int puzzleTypeInt){
+            switch(puzzleTypeInt){
+                case Session.TYPE_2X2:
+                    return "2x2";
+                case Session.TYPE_3X3:
+                    return "3x3";
+                case Session.TYPE_4X4:
+                    return "4X4";
+                case Session.TYPE_5X5:
+                    return "5x5";
+                    case Session.TYPE_6X6:
+                        return "6x6";
+
+
+            }
+        }
 }
 

@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
         mainNav=findViewById(R.id.mainNav);
         TimerFragment t = new TimerFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("puzzleType",Session.TYPE_2X2);
+        t.setArguments(bundle);
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.mainFrag,t);

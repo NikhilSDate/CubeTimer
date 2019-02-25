@@ -96,8 +96,8 @@ public class TimerFragment extends Fragment  {
     }
     public void initialize(View view){
         puzzleType=view.findViewById(R.id.puzzle_type);
-        Integer[] items={R.drawable.ic_2x2};
-        PuzzleAdapter spinnerAdapter = new PuzzleAdapter(getActivity(),R.layout.puzzle_spinner_layout,items);
+
+        PuzzleAdapter spinnerAdapter = new PuzzleAdapter(getActivity(),R.layout.puzzle_spinner_layout,Utils.getPuzzleDrawableIds());
         puzzleType.setAdapter(spinnerAdapter);
 
 

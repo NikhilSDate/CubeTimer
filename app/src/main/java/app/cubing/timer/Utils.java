@@ -134,5 +134,8 @@ public class Utils {
 
 
         }
+        public static Integer[] getPuzzleDrawableIds(){
+            return new Integer[]{R.drawable.ic_2x2,R.drawable.ic_3x3,R.drawable.ic_4x4,R.drawable.ic_5x5,R.drawable.ic_6x6};
+        }
 }
 

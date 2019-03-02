@@ -1,6 +1,7 @@
 package app.cubing.timer;
 
 import android.content.Context;
+import android.widget.ArrayAdapter;
 
 import net.gnehzr.tnoodle.scrambles.Puzzle;
 
@@ -17,50 +18,50 @@ import puzzle.ThreeByThreeCubePuzzle;
 import puzzle.TwoByTwoCubePuzzle;
 
 public class Utils {
-        public static String scramble(String puzzleName){
-            switch (puzzleName) {
-                case "2x2x2":
+        public static String scramble(int puzzleType){
+            switch (puzzleType) {
+                case Session.TYPE_2X2:
                     Puzzle puzzle1 = new TwoByTwoCubePuzzle();
                     return puzzle1.generateScramble();
 
 
-                case "3x3x3":
+                case Session.TYPE_3X3:
                     Puzzle puzzle2 = new ThreeByThreeCubePuzzle();
                     return puzzle2.generateScramble();
 
-                case "4x4x4":
+                case Session.TYPE_4X4:
                     Puzzle puzzle3=new FourByFourCubePuzzle();
                     return puzzle3.generateScramble();
 
-                case "5X5X5":
+                case Session.TYPE_5X5:
                     Puzzle puzzle4=new CubePuzzle(5);
                     return puzzle4.generateScramble();
 
-                case "6x6x6":
+                case Session.TYPE_6X6:
                     Puzzle puzzle5=new CubePuzzle(6);
                     return puzzle5.generateScramble();
 
-                case "7x7x7":
+                case Session.TYPE_7X7:
                     Puzzle puzzle6=new CubePuzzle(7);
                     return puzzle6.generateScramble();
 
-                case "Pyraminx":
+                case Session.TYPE_PYRAMINX:
                     Puzzle puzzle7=new PyraminxPuzzle();
                     return puzzle7.generateScramble();
 
-                case "Skewb":
+                case Session.TYPE_SKEWB:
                     Puzzle puzzle8=new SkewbPuzzle();
                     return puzzle8.generateScramble();
 
-                case "Square-1":
+                case Session.TYPE_SQUARE1:
                     Puzzle puzzle9=new SquareOnePuzzle();
                     return puzzle9.generateScramble();
 
-                case "Clock":
+                case Session.TYPE_CLOCK:
                     Puzzle puzzle10=new ClockPuzzle();
                     return puzzle10.generateScramble();
 
-                case "Megaminx":
+                case Session.TYPE_MEGAMINX:
                     Puzzle puzzle11=new MegaminxPuzzle();
                     return puzzle11.generateScramble();
 
@@ -137,6 +138,38 @@ public class Utils {
         public static Integer[] getPuzzleDrawableIds(){
             return new Integer[]{R.drawable.ic_2x2,R.drawable.ic_3x3,R.drawable.ic_4x4,R.drawable.ic_5x5
                     ,R.drawable.ic_6x6, R.drawable.ic_7x7,R.drawable.ic_prya,R.drawable.ic_skewb,R.drawable.ic_mega,R.drawable.ic_sq1};
+        }
+        public static int getPuzzleTypeFromInt(int drawable){
+            switch (drawable){
+                case R.drawable.ic_2x2:
+                    return Session.TYPE_2X2;
+                case R.drawable.ic_3x3:
+                    return Session.TYPE_3X3;
+                case R.drawable.ic_4x4:
+                    return Session.TYPE_4X4;
+                case R.drawable.ic_5x5:
+                    return Session.TYPE_5X5;
+                case R.drawable.ic_6x6:
+                    return Session.TYPE_6X6;
+                case R.drawable.ic_7x7:
+                    return Session.TYPE_7X7;
+                case R.drawable.ic_prya:
+                    return Session.TYPE_PYRAMINX;
+                case R.drawable.ic_skewb:
+                    return Session.TYPE_SKEWB;
+                case R.drawable.ic_mega:
+                    return Session.TYPE_MEGAMINX;
+                case R.drawable.ic_sq1:
+                    return Session.TYPE_SQUARE1;
+                default:
+                    return -1;
+
+
+            }
+        }
+        public static int getIndexFromPuzzleType(ArrayAdapter<Integer> adapter,int puzzleType){
+            return adapter.getPosition(puzzleType);
+
         }
 }
 

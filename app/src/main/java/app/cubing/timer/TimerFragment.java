@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.PictureDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -99,6 +101,40 @@ public class TimerFragment extends Fragment  {
 
         PuzzleAdapter spinnerAdapter = new PuzzleAdapter(getActivity(),R.layout.puzzle_spinner_layout,Utils.getPuzzleDrawableIds());
         puzzleType.setAdapter(spinnerAdapter);
+        puzzleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int item = Integer.parseInt(parent.getItemAtPosition(position).toString());
+                currentPuzzleType=Utils.getPuzzleTypeFromInt(item);
+                boolean doesSessionExist=false;
+                for(Session session:Sessions.getSingletonInstance().getSessionsMap().values()){
+                    if(session.getType()==currentPuzzleType){
+                        doesSessionExist=true;
+                        break;
+                    }
+                }
+                if(doesSessionExist){
+                    for(Session session:Sessions.getSingletonInstance().getSessionsMap().values()){
+                        if(session.getType()==currentPuzzleType){
+                           currentSession=session;
+                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("currentSession",session.getName());
+                            editor.apply();
+
+                        }
+                    }
+                }else{
+                    showDialog();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         timer=view.findViewById(R.id.time);
@@ -181,6 +217,8 @@ public class TimerFragment extends Fragment  {
         if(getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null)!=null){
             currentSession=Sessions.getSingletonInstance().getSessionsMap().get(
                     getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null));
+            currentPuzzleType=currentSession.getType();
+            puzzleType.setSelection(Utils.getIndexFromPuzzleType(spinnerAdapter,currentPuzzleType));
         }else{
             currentPuzzleType=Session.TYPE_3X3;
             showDialog();
@@ -367,6 +405,17 @@ public class TimerFragment extends Fragment  {
         Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
 
 
+    }
+    private class ScrambleGeneratorAsync extends AsyncTask<Integer,String,String> {
+        @Override
+        public String doInBackground(Integer... params){
+            return Utils.scramble(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            scramble.setText(s);
+        }
     }
 
 

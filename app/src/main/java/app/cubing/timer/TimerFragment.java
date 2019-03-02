@@ -53,7 +53,6 @@ public class TimerFragment extends Fragment  {
     boolean isDNF;
     boolean isPlusTwo;
     int currentSolveCode=-1;
-    ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
 
 
 
@@ -123,12 +122,17 @@ public class TimerFragment extends Fragment  {
                             SharedPreferences.Editor editor = sharedPref.edit();
                             editor.putString("currentSession",session.getName());
                             editor.apply();
+                            Log.i("TAG","sharedpreferences put"+session.getType());
 
                         }
                     }
                 }else{
                     showDialog();
                 }
+                scramble.setText("Scrambling...");
+                ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
+
+                scrambleGenerator.execute(currentPuzzleType);
 
             }
 
@@ -230,6 +234,9 @@ public class TimerFragment extends Fragment  {
 
 
         }
+        scramble.setText("Scrambling...");
+        ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
+
         scrambleGenerator.execute(currentPuzzleType);
 
 
@@ -407,6 +414,9 @@ public class TimerFragment extends Fragment  {
         Sessions.getSingletonInstance().editSession(currentSession);
         Sessions.getSingletonInstance().writeToFile(getContext());
         Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
+        scramble.setText("Scrambling...");
+        ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
+
         scrambleGenerator.execute(currentPuzzleType);
 
 

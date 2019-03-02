@@ -24,6 +24,7 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/puzzle_type"
@@ -34,15 +35,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="106dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="107dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scramble" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/delete"
@@ -53,6 +56,7 @@
         android:layout_marginTop="32dp"
         android:text=""
         app:icon="@drawable/ic_delete_black_24dp"
+        app:iconPadding="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time" />
 

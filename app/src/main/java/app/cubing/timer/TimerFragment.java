@@ -53,6 +53,8 @@ public class TimerFragment extends Fragment  {
     boolean isDNF;
     boolean isPlusTwo;
     int currentSolveCode=-1;
+    ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
+
 
 
     Spinner puzzleType;
@@ -144,6 +146,7 @@ public class TimerFragment extends Fragment  {
         scramble=view.findViewById(R.id.scramble);
 
 
+
         plusTwo=view.findViewById(R.id.plus_two);
         dnf=view.findViewById(R.id.dnf);
         plusTwo.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +230,7 @@ public class TimerFragment extends Fragment  {
 
 
         }
+        scrambleGenerator.execute(currentPuzzleType);
 
 
 
@@ -403,6 +407,7 @@ public class TimerFragment extends Fragment  {
         Sessions.getSingletonInstance().editSession(currentSession);
         Sessions.getSingletonInstance().writeToFile(getContext());
         Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
+        scrambleGenerator.execute(currentPuzzleType);
 
 
     }

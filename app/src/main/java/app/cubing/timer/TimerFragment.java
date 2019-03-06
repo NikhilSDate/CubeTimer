@@ -53,6 +53,8 @@ public class TimerFragment extends Fragment  {
     boolean isDNF;
     boolean isPlusTwo;
     int currentSolveCode=-1;
+    AsyncTask currentTask;
+    boolean isFirstTime=true;
 
 
 
@@ -82,58 +84,85 @@ public class TimerFragment extends Fragment  {
 
         initialize(view);
 
-        Puzzle puzzle = new ThreeByThreeCubePuzzle();
-        String scramble=puzzle.generateScramble();
-        view.setOnTouchListener(listener);
-        ImageView view1 = view.findViewById(R.id.scramble_image);
-        try {
-            PictureDrawable pictureDrawable = new PictureDrawable(SVG.getFromString(puzzle.drawScramble(scramble,null).toString()).renderToPicture());
-            view1.setImageDrawable(pictureDrawable);
-        } catch (SVGParseException e) {
-            e.printStackTrace();
-        } catch (InvalidScrambleException e) {
-            e.printStackTrace();
-        }
 
 
     }
     public void initialize(View view){
+        if(getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null)!=null){
+            Log.i("TAG","preferences->"+getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null));
+            currentSession=Sessions.getSingletonInstance().getSessionsMap().get(
+                    getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null));
+            currentPuzzleType=currentSession.getType();
+        }else{
+            currentPuzzleType=Session.TYPE_3X3;
+            showDialog();
+        }
+        Log.i("TAG","puzzleType->"+currentPuzzleType);
+
+
+
         puzzleType=view.findViewById(R.id.puzzle_type);
+        timer=view.findViewById(R.id.time);
+        plusTwo=view.findViewById(R.id.plus_two);
+        dnf=view.findViewById(R.id.dnf);
+        delete=view.findViewById(R.id.delete);
+        scramble=view.findViewById(R.id.scramble);
+
+
 
         PuzzleAdapter spinnerAdapter = new PuzzleAdapter(getActivity(),R.layout.puzzle_spinner_layout,Utils.getPuzzleDrawableIds());
         puzzleType.setAdapter(spinnerAdapter);
+        puzzleType.setSelection(Utils.getIndexFromPuzzleType(spinnerAdapter,currentPuzzleType));
+        timer.setText("0.00");
+
+        scramble.setText(Utils.scramble(currentPuzzleType));
+
+        view.setOnTouchListener(listener);
+
+
         puzzleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int item = Integer.parseInt(parent.getItemAtPosition(position).toString());
-                currentPuzzleType=Utils.getPuzzleTypeFromInt(item);
-                boolean doesSessionExist=false;
-                for(Session session:Sessions.getSingletonInstance().getSessionsMap().values()){
-                    if(session.getType()==currentPuzzleType){
-                        doesSessionExist=true;
-                        break;
-                    }
-                }
-                if(doesSessionExist){
-                    for(Session session:Sessions.getSingletonInstance().getSessionsMap().values()){
-                        if(session.getType()==currentPuzzleType){
-                           currentSession=session;
-                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("currentSession",session.getName());
-                            editor.apply();
-                            Log.i("TAG","sharedpreferences put"+session.getType());
-
+                if (!isFirstTime) {
+                    Log.i("TAG", "item selected called");
+                    int item = (int) parent.getItemAtPosition(position);
+                    currentPuzzleType = Utils.getPuzzleTypeFromInt(item);
+                    Log.i("TAG", "type in listener->" + String.valueOf(currentPuzzleType));
+                    boolean doesSessionExist = false;
+                    for (Session session : Sessions.getSingletonInstance().getSessionsMap().values()) {
+                        if (session.getType() == currentPuzzleType) {
+                            doesSessionExist = true;
+                            break;
                         }
                     }
+
+                    if (doesSessionExist) {
+                        for (Session session : Sessions.getSingletonInstance().getSessionsMap().values()) {
+                            if (session.getType() == currentPuzzleType) {
+                                currentSession = session;
+                                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("currentSession", session.getName());
+                                editor.apply();
+                                Log.i("TAG", "sharedpreferences put" + session.getType());
+
+                            }
+                        }
+                    } else {
+                        showDialog();
+                    }
+                    scramble.setText("Scrambling...");
+                    ScrambleGeneratorAsync scrambleGenerator = new ScrambleGeneratorAsync();
+                    currentTask = scrambleGenerator;
+
+                    scrambleGenerator.execute(currentPuzzleType);
+
+
                 }else{
-                    showDialog();
+                    Log.i("TAG","First time");
+                    isFirstTime=false;
+
                 }
-                scramble.setText("Scrambling...");
-                ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
-
-                scrambleGenerator.execute(currentPuzzleType);
-
             }
 
             @Override
@@ -143,16 +172,15 @@ public class TimerFragment extends Fragment  {
         });
 
 
-        timer=view.findViewById(R.id.time);
-        timer.setText("0.00");
-
-
-        scramble=view.findViewById(R.id.scramble);
 
 
 
-        plusTwo=view.findViewById(R.id.plus_two);
-        dnf=view.findViewById(R.id.dnf);
+
+
+
+
+
+
         plusTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +231,7 @@ public class TimerFragment extends Fragment  {
                 }
             }
         });
-        delete=view.findViewById(R.id.delete);
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,23 +249,8 @@ public class TimerFragment extends Fragment  {
                 dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
             }
         });
-        if(getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null)!=null){
-            currentSession=Sessions.getSingletonInstance().getSessionsMap().get(
-                    getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null));
-            currentPuzzleType=currentSession.getType();
-            puzzleType.setSelection(Utils.getIndexFromPuzzleType(spinnerAdapter,currentPuzzleType));
-        }else{
-            currentPuzzleType=Session.TYPE_3X3;
-            showDialog();
 
 
-
-
-        }
-        scramble.setText("Scrambling...");
-        ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
-
-        scrambleGenerator.execute(currentPuzzleType);
 
 
 
@@ -416,7 +429,7 @@ public class TimerFragment extends Fragment  {
         Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().toString());
         scramble.setText("Scrambling...");
         ScrambleGeneratorAsync scrambleGenerator=new ScrambleGeneratorAsync();
-
+currentTask=scrambleGenerator;
         scrambleGenerator.execute(currentPuzzleType);
 
 

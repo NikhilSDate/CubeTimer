@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Sessions.getSingletonInstance().getFromFile(this);
         mainNav=findViewById(R.id.mainNav);
         TimerFragment t = new TimerFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("puzzleType",Session.TYPE_2X2);
-        t.setArguments(bundle);
+
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.mainFrag,t);
@@ -36,12 +34,29 @@ public class MainActivity extends AppCompatActivity {
         mainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.mainFrag,new SessionFragment());
-                transaction.commit();
+                switch(item.getItemId()){
+                    case R.id.timer:
+                        if(!(Utils.getVisibleFragment(MainActivity.this) instanceof TimerFragment)){
+                            FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.mainFrag,new TimerFragment());
+                            transaction.commit();
 
-                return true;
+                        }
+                    break;
+                    case R.id.log:
+                        if(!(Utils.getVisibleFragment(MainActivity.this) instanceof LogFragment)){
+                            FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.mainFrag,new LogFragment());
+                            transaction.commit();
+
+                        }
+                        break;
+                    case R.id.training:
+                        break;
+                    case R.id.settings:
+                        break;
+                }
+            return true;
             }
         });
 //        AssetManager am = this.getApplicationContext().getAssets();
@@ -52,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public void replaceFragment(){
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.mainFrag,new SessionFragment());
-        transaction.commit();
-    }
+
 
 }

@@ -6,24 +6,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import puzzle.ClockPuzzle;
-import puzzle.CubePuzzle;
-import puzzle.ThreeByThreeCubePuzzle;
-import puzzle.TwoByTwoCubePuzzle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.gnehzr.tnoodle.scrambles.Puzzle;
-
-import java.util.Random;
-
-public class SessionFragment extends Fragment {
+public class LogFragment extends Fragment {
     TextView textView;
 
-    public SessionFragment() {
+    public LogFragment() {
         // Required empty public constructor
     }
 
@@ -31,8 +23,7 @@ public class SessionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_session, container, false);
+        return inflater.inflate(R.layout.fragment_log, container, false);
     }
 
     @Override

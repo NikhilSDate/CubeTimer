@@ -1,12 +1,19 @@
 package app.cubing.timer;
 
+
 import android.content.Context;
+
 import android.widget.ArrayAdapter;
 
 import net.gnehzr.tnoodle.scrambles.Puzzle;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import androidx.fragment.app.FragmentManager;
 import puzzle.ClockPuzzle;
 import puzzle.CubePuzzle;
 import puzzle.FourByFourCubePuzzle;
@@ -161,6 +168,7 @@ public class Utils {
                     return Session.TYPE_MEGAMINX;
                 case R.drawable.ic_sq1:
                     return Session.TYPE_SQUARE1;
+
                 default:
                     return -1;
 
@@ -168,8 +176,43 @@ public class Utils {
             }
         }
         public static int getIndexFromPuzzleType(ArrayAdapter<Integer> adapter,int puzzleType){
-            return adapter.getPosition(puzzleType);
+            switch(puzzleType){
+                case Session.TYPE_2X2:
+                    return adapter.getPosition(R.drawable.ic_2x2);
+                case Session.TYPE_3X3:
+                    return adapter.getPosition(R.drawable.ic_3x3);
+                case Session.TYPE_4X4:
+                    return adapter.getPosition(R.drawable.ic_4x4);
+                case Session.TYPE_5X5:
+                    return adapter.getPosition(R.drawable.ic_5x5);
+                case Session.TYPE_6X6:
+                    return adapter.getPosition(R.drawable.ic_6x6);
+                case Session.TYPE_7X7:
+                    return adapter.getPosition(R.drawable.ic_7x7);
+                case Session.TYPE_PYRAMINX:
+                    return adapter.getPosition(R.drawable.ic_prya);
+                case Session.TYPE_SKEWB:
+                    return adapter.getPosition(R.drawable.ic_skewb);
+                case Session.TYPE_MEGAMINX:
+                    return adapter.getPosition(R.drawable.ic_mega);
+                case Session.TYPE_SQUARE1:
+                    return adapter.getPosition(R.drawable.ic_sq1);
+                default:
+                    return -1;
+            }
 
         }
+    public static Fragment getVisibleFragment(AppCompatActivity activity){
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
+
 }
 

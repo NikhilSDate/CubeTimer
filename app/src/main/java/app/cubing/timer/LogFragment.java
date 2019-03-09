@@ -1,6 +1,7 @@
 package app.cubing.timer;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.util.ArrayList;
+
 public class LogFragment extends Fragment {
     TextView textView;
     RecyclerView sessionsList;
+    ArrayList<String> sessionNames;
 
     public LogFragment() {
         // Required empty public constructor
@@ -37,9 +43,12 @@ public class LogFragment extends Fragment {
 
     }
     public void initialize(View view){
+        sessionNames=Utils.getSessionNames();
+
+
         sessionsList=view.findViewById(R.id.log_sessions);
         sessionsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        LogAdapter adapter=new LogAdapter(Utils.getSessionNames());
+        final LogAdapter adapter=new LogAdapter(sessionNames);
 
         adapter.setClickListener(new LogAdapter.customClickListener() {
             @Override
@@ -49,7 +58,24 @@ public class LogFragment extends Fragment {
 
             @Override
             public void onItemLongClick(int position, View v) {
-
+                final String sessionName=adapter.getItemAtPosition(position);
+                final MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getContext());
+                builder.setMessage("Do you really want to delete this session?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Sessions.getSingletonInstance().removeSession(sessionName);
+                                Sessions.getSingletonInstance().writeToFile(getContext());
+                                sessionNames=Utils.getSessionNames();
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
         sessionsList.setAdapter(adapter);

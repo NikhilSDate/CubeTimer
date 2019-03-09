@@ -2,6 +2,7 @@ package app.cubing.timer;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     ArrayList<String> sessionsList;
     private static customClickListener listener;
+
+
 
 
     public interface customClickListener{
@@ -97,5 +100,8 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     }
     public void setClickListener(customClickListener clickListener){
        LogAdapter.listener=clickListener;
+    }
+    public String getItemAtPosition(int position){
+        return sessionsList.get(position);
     }
 }

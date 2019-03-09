@@ -1,9 +1,8 @@
 package app.cubing.timer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static java.lang.Float.NaN;
 
@@ -74,7 +73,7 @@ public class Session {
         Integer[] codesArray=solves.keySet().toArray(new Integer[solves.keySet().size()]);
         float[] times=new float[5];
         for(int i =codesArray.length-5;i<=codesArray.length-1;i++){
-            times[i-codesArray.length-5]=solves.get(codesArray[i]).getTime();
+            times[i-(codesArray.length-5)]=solves.get(codesArray[i]).getTime();
         }
         int minIndex=0;
         int maxIndex=0;
@@ -107,7 +106,7 @@ public class Session {
         Integer[] codesArray=solves.keySet().toArray(new Integer[solves.keySet().size()]);
         float[] times=new float[12];
         for(int i =codesArray.length-12;i<=codesArray.length-1;i++){
-            times[i-codesArray.length-12]=solves.get(codesArray[i]).getTime();
+            times[i-(codesArray.length-12)]=solves.get(codesArray[i]).getTime();
         }
         int minIndex=0;
         int maxIndex=0;

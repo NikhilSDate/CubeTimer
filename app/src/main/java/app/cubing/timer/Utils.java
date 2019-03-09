@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import net.gnehzr.tnoodle.scrambles.Puzzle;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -212,6 +213,13 @@ public class Utils {
             }
         }
         return null;
+    }
+    public static ArrayList<String> getSessionNames(){
+            ArrayList<String> names=new ArrayList<String>();
+            for(Session s:Sessions.getSingletonInstance().getSessionsMap().values()){
+                names.add(s.getName());
+            }
+            return names;
     }
 
 }

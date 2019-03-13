@@ -87,6 +87,9 @@ public class TimerFragment extends Fragment  {
 
 
     }
+
+
+
     public void initialize(View view){
         if(getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null)!=null){
             Log.i("TAG","preferences->"+getActivity().getPreferences(Context.MODE_PRIVATE).getString("currentSession",null));

@@ -221,6 +221,15 @@ public class Utils {
             }
             return names;
     }
+    public static ArrayList<String> getFilteredSessions(int puzzleType){
+            ArrayList<String> filteredSessions=new ArrayList<String>();
+            for(Session s:Sessions.getSingletonInstance().getSessionsMap().values()){
+                if(s.getType()==puzzleType){
+                    filteredSessions.add(s.getName());
+                }
+            }
+            return filteredSessions;
+    }
 
 }
 

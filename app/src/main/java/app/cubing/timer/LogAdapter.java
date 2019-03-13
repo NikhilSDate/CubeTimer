@@ -92,16 +92,21 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
 
 
 
+
     }
 
     @Override
     public int getItemCount() {
         return sessionsList.size();
     }
-    public void setClickListener(customClickListener clickListener){
-       LogAdapter.listener=clickListener;
+    void setClickListener(customClickListener listener){
+        LogAdapter.listener=listener;
     }
+
     public String getItemAtPosition(int position){
         return sessionsList.get(position);
+    }
+    public void removeItem(int position){
+        sessionsList.remove(position);
     }
 }

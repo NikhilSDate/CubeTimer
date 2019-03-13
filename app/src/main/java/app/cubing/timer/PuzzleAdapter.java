@@ -17,6 +17,7 @@ public class PuzzleAdapter extends ArrayAdapter<Integer> {
         super(context,textViewResourceId,objects);
 
 
+
     }
     public View getCustomView(int position, View convertView, ViewGroup parent){
         View customView=LayoutInflater.from(getContext()).inflate(R.layout.puzzle_spinner_layout,parent,false);

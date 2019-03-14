@@ -109,4 +109,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     public void removeItem(int position){
         sessionsList.remove(position);
     }
+    public void changeData(ArrayList<String> sessionsList){
+        this.sessionsList=sessionsList;
+    }
 }

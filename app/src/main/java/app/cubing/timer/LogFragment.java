@@ -12,15 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,7 @@ public class LogFragment extends Fragment {
     RecyclerView sessionsList;
     ArrayList<String> sessionNames;
     int currentPuzzleType;
+    TextInputEditText search;
 
     public LogFragment() {
         // Required empty public constructor
@@ -57,7 +60,11 @@ public class LogFragment extends Fragment {
         }else{
             currentPuzzleType=Session.TYPE_3X3;
         }
-        sessionNames=Utils.getFilteredSessions(currentPuzzleType);
+        search =view.findViewById(R.id.search);
+        sessionsList=view.findViewById(R.id.log_sessions);
+        puzzleType=view.findViewById(R.id.log_puzzletype);
+
+        sessionNames=Utils.getFilteredSessions(currentPuzzleType, search.getText().toString());
         sessionsList.setLayoutManager(new LinearLayoutManager(getContext()));
         final LogAdapter adapter=new LogAdapter(sessionNames);
 
@@ -100,8 +107,6 @@ public class LogFragment extends Fragment {
         sessionsList.setAdapter(adapter);
 
 
-        sessionsList=view.findViewById(R.id.log_sessions);
-        puzzleType=view.findViewById(R.id.log_puzzletype);
         PuzzleAdapter spinnerAdapter=new PuzzleAdapter(getContext(),R.layout.puzzle_spinner_layout,Utils.getPuzzleDrawableIds());
         puzzleType.setAdapter(spinnerAdapter);
         puzzleType.setSelection(Utils.getIndexFromPuzzleType(spinnerAdapter,currentPuzzleType));
@@ -110,14 +115,34 @@ public class LogFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentPuzzleType=Utils.getPuzzleTypeFromInt((int)parent.getItemAtPosition(position));
-                sessionNames=Utils.getFilteredSessions(currentPuzzleType);
-                LogAdapter filteredSpinnerAdapter=new LogAdapter(sessionNames);
+                sessionNames=Utils.getFilteredSessions(currentPuzzleType, search.getText().toString());
+                adapter.changeData(sessionNames);
 
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.i("TAG","beforeTextChanged");
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i("TAG","onTextChanged");
+                adapter.changeData(Utils.getFilteredSessions(currentPuzzleType,s.toString()));
+                adapter.notifyDataSetChanged();
 
             }
         });

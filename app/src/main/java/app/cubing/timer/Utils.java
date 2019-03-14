@@ -3,6 +3,7 @@ package app.cubing.timer;
 
 import android.content.Context;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import net.gnehzr.tnoodle.scrambles.Puzzle;
@@ -11,6 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -221,14 +223,39 @@ public class Utils {
             }
             return names;
     }
-    public static ArrayList<String> getFilteredSessions(int puzzleType){
+    public static ArrayList<String> getFilteredSessions(int puzzleType, @Nullable String search ){
             ArrayList<String> filteredSessions=new ArrayList<String>();
-            for(Session s:Sessions.getSingletonInstance().getSessionsMap().values()){
+            ArrayList<String> finalList=new ArrayList<String>();
+
+        for(Session s:Sessions.getSingletonInstance().getSessionsMap().values()){
                 if(s.getType()==puzzleType){
                     filteredSessions.add(s.getName());
                 }
             }
-            return filteredSessions;
+            if(search==null) {
+                finalList=filteredSessions;
+            }else{
+                String[] tokens=search.split(" ");
+                for(String s:filteredSessions){
+                    boolean contains=true;
+                    for(String token:tokens){
+                        if(!s.toUpperCase().trim().contains(token.toUpperCase())){
+                            contains=false;
+                        }
+
+                    }
+                    Log.i("TAG",String.valueOf(contains));
+                    if(contains){
+                        finalList.add(s);
+                    }
+                }
+                Log.i("TAG",finalList.toString());
+
+
+
+            }
+            return finalList;
+
     }
 
 }

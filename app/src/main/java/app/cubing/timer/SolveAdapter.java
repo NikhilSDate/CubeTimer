@@ -39,7 +39,7 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
     public void onBindViewHolder(@NonNull final CustomViewHolder holder, final int position) {
         final Solve solve=Sessions.getSingletonInstance().getSessionsMap().
                 get(sessionName).getSolve(solveCodes.get(position));
-        holder.time.setText(String.valueOf(solve.getTime()));
+        holder.time.setText(String.valueOf(Utils.formatTime((double)solve.getTime(),false)));
         holder.scramble.setText(String.valueOf(solve.getScramble()));
         holder.expand.setImageResource(R.drawable.ic_drop_down);
         holder.scramble.setVisibility(View.GONE);
@@ -78,6 +78,7 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
         holder.dnf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("TAG",Sessions.getSingletonInstance().getSessionsMap().get(sessionName).toString());
 
                     if (!holder.isDNF) {
                         Log.i("TAG", "dnf clicked");
@@ -98,6 +99,7 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
                                 Sessions.getSingletonInstance().getSessionsMap().get(sessionName),
                                 solveCodes.get(position), Utils.getPenalty(holder.isPlusTwo, holder.isDNF));
 
+
                         holder.dnf.setTextColor(Color.WHITE);
                         holder.dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
                     }
@@ -108,9 +110,13 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
             @Override
             public void onClick(View v) {
 
-
+                Session s=Sessions.getSingletonInstance().getSessionsMap().get(sessionName);
+                s.removeSolve(solveCodes.get(position));
+                Sessions.getSingletonInstance().editSession(s);
+                Sessions.getSingletonInstance().writeToFile(context);
                 solveCodes.remove(position);
                 notifyItemRemoved(position);
+
                 holder.isPlusTwo=false;
                 holder.plusTwo.setTextColor(Color.WHITE);
                 holder.plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
@@ -123,11 +129,22 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
         holder.expand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.scramble.setVisibility(View.VISIBLE);
-                holder.plusTwo.setVisibility(View.VISIBLE);
-                holder.dnf.setVisibility(View.VISIBLE);
-                holder.delete.setVisibility(View.VISIBLE);
-                holder.expand.setImageResource(R.drawable.ic_drop_up);
+                if(!holder.isExpanded) {
+                    holder.scramble.setVisibility(View.VISIBLE);
+                    holder.plusTwo.setVisibility(View.VISIBLE);
+                    holder.dnf.setVisibility(View.VISIBLE);
+                    holder.delete.setVisibility(View.VISIBLE);
+                    holder.expand.setImageResource(R.drawable.ic_drop_up);
+                    holder.isExpanded=true;
+                }else{
+                    holder.scramble.setVisibility(View.GONE);
+                    holder.plusTwo.setVisibility(View.GONE);
+                    holder.dnf.setVisibility(View.GONE);
+                    holder.delete.setVisibility(View.GONE);
+                    holder.expand.setImageResource(R.drawable.ic_drop_down);
+                    holder.isExpanded=false;
+
+                }
             }
         });
 

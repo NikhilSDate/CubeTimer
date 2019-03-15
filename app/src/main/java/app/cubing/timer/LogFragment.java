@@ -73,12 +73,15 @@ public class LogFragment extends Fragment {
         adapter.setClickListener(new LogAdapter.customClickListener() {
             @Override
             public void onItemClick(int position, View v) {
+                Log.i("TAG","clicked");
                 Bundle bundle=new Bundle();
                 bundle.putString("session",adapter.getItemAtPosition(position));
                 SessionDetailsFragment sessionDetailsFragment=new SessionDetailsFragment();
+                sessionDetailsFragment.setArguments(bundle);
                 FragmentManager manager=getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction=manager.beginTransaction();
                 transaction.replace(R.id.mainFrag,sessionDetailsFragment);
+                transaction.commit();
             }
 
             @Override

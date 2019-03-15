@@ -6,9 +6,11 @@ public class Solve {
     final static int PENALTY_DNF=2;
     private float time;
     private int penalty;
-    public Solve(float time,int penalty){
+    private String scramble;
+    public Solve(float time,int penalty,String scramble){
         this.time=time;
         this.penalty=penalty;
+        this.scramble=scramble;
 
     }
 
@@ -18,6 +20,9 @@ public class Solve {
 
     public void setTime(float time) {
         this.time = time;
+    }
+    public String getScramble(){
+        return this.scramble;
     }
 
 

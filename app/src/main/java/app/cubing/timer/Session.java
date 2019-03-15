@@ -245,6 +245,7 @@ public class Session {
             str+="~"+entry.getKey();
             str+="~"+entry.getValue().getTime();
             str+="~"+entry.getValue().getPenalty();
+            str+="~"+entry.getValue().getScramble();
 
         }
         return str;
@@ -254,14 +255,18 @@ public class Session {
         String[] tokens = str.split("~");
         session.name=tokens[0];
         session.type=Integer.parseInt(tokens[1]);
-        for(int i=4;i<tokens.length;i+=3){
-            int code=Integer.parseInt(tokens[i-2]);
-            float time=Float.parseFloat(tokens[i-1]);
-            String penalty=tokens[i];
-            Solve solve=new Solve(time,Integer.parseInt(penalty));
+        for(int i=5;i<tokens.length;i+=4){
+            int code=Integer.parseInt(tokens[i-3]);
+            float time=Float.parseFloat(tokens[i-2]);
+            String penalty=tokens[i-1];
+            String scramble=tokens[i];
+            Solve solve=new Solve(time,Integer.parseInt(penalty),scramble);
             session.solves.put(code,solve);
 
         }
         return session;
+    }
+    public LinkedHashMap<Integer,Solve> getSolvesMap(){
+        return this.solves;
     }
 }

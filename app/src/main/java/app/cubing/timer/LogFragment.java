@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,7 +73,12 @@ public class LogFragment extends Fragment {
         adapter.setClickListener(new LogAdapter.customClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                Log.i("TAG","CLICKED");
+                Bundle bundle=new Bundle();
+                bundle.putString("session",adapter.getItemAtPosition(position));
+                SessionDetailsFragment sessionDetailsFragment=new SessionDetailsFragment();
+                FragmentManager manager=getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction=manager.beginTransaction();
+                transaction.replace(R.id.mainFrag,sessionDetailsFragment);
             }
 
             @Override

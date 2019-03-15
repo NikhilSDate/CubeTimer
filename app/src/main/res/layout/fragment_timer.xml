@@ -48,7 +48,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/delete"
+        android:id="@+id/DELETE"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="49dp"
         android:layout_height="wrap_content"
@@ -71,12 +71,12 @@
         android:text="+2"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/dnf"
-        app:layout_constraintStart_toEndOf="@+id/delete"
+        app:layout_constraintEnd_toStartOf="@+id/DNF"
+        app:layout_constraintStart_toEndOf="@+id/DELETE"
         app:layout_constraintTop_toBottomOf="@+id/time" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/dnf"
+        android:id="@+id/DNF"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="65dp"
         android:layout_height="0dp"
@@ -101,5 +101,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/delete" />
+        app:layout_constraintTop_toBottomOf="@+id/DELETE" />
 </androidx.constraintlayout.widget.ConstraintLayout>

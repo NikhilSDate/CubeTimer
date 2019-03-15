@@ -1,20 +1,17 @@
 package app.cubing.timer;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.PictureDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import puzzle.ThreeByThreeCubePuzzle;
 
 
 import android.os.Handler;
@@ -24,19 +21,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGParseException;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import net.gnehzr.tnoodle.scrambles.InvalidScrambleException;
-import net.gnehzr.tnoodle.scrambles.Puzzle;
-
 
 
 public class TimerFragment extends Fragment  {
@@ -107,8 +97,8 @@ public class TimerFragment extends Fragment  {
         puzzleType=view.findViewById(R.id.puzzle_type);
         timer=view.findViewById(R.id.time);
         plusTwo=view.findViewById(R.id.plus_two);
-        dnf=view.findViewById(R.id.dnf);
-        delete=view.findViewById(R.id.delete);
+        dnf=view.findViewById(R.id.DNF);
+        delete=view.findViewById(R.id.DELETE);
         scramble=view.findViewById(R.id.scramble);
 
 
@@ -241,6 +231,8 @@ public class TimerFragment extends Fragment  {
                 timer.setText("0.00");
 
                 currentSession.removeSolve(currentSolveCode);
+                Sessions.getSingletonInstance().editSession(currentSession);
+                Sessions.getSingletonInstance().writeToFile(getContext());
                 currentSolveCode=-1;
 
                 isPlusTwo=false;
@@ -425,7 +417,7 @@ public class TimerFragment extends Fragment  {
 
 
 
-        Solve solve=new Solve(elapsedTime,Solve.PENALTY_NONE);
+        Solve solve=new Solve(elapsedTime,Solve.PENALTY_NONE,scramble.getText().toString());
         currentSolveCode=currentSession.addSolve(solve);
         Sessions.getSingletonInstance().editSession(currentSession);
         Sessions.getSingletonInstance().writeToFile(getContext());

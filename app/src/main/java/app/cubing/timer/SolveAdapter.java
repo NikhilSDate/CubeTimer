@@ -39,7 +39,9 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
     public void onBindViewHolder(@NonNull final CustomViewHolder holder, final int position) {
         final Solve solve=Sessions.getSingletonInstance().getSessionsMap().
                 get(sessionName).getSolve(solveCodes.get(position));
-        holder.time.setText(String.valueOf(Utils.formatTime((double)solve.getTime(),false)));
+        Log.i("TAG","time->"+String.valueOf(Utils.formatTime((double)solve.getTime()*1000,false)));
+
+        holder.time.setText("     "+String.valueOf(Utils.formatTime((double)solve.getTime()*1000,false)));
         holder.scramble.setText(String.valueOf(solve.getScramble()));
         holder.expand.setImageResource(R.drawable.ic_drop_down);
         holder.scramble.setVisibility(View.GONE);
@@ -109,21 +111,27 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    Session s = Sessions.getSingletonInstance().getSessionsMap().get(sessionName);
+                    Log.i("TAG",String.valueOf(position));
+                    if(position==solveCodes.size()){
+                        s.removeSolve(solveCodes.get(position-1));
+                        solveCodes.remove(position-1);
+                        notifyItemRemoved(position-1);
 
-                Session s=Sessions.getSingletonInstance().getSessionsMap().get(sessionName);
-                s.removeSolve(solveCodes.get(position));
-                Sessions.getSingletonInstance().editSession(s);
-                Sessions.getSingletonInstance().writeToFile(context);
-                solveCodes.remove(position);
-                notifyItemRemoved(position);
+                    }else {
+                        s.removeSolve(solveCodes.get(position));
+                        solveCodes.remove(position);
+                        notifyItemRemoved(position);
+                    }
+                    Sessions.getSingletonInstance().editSession(s);
+                    Sessions.getSingletonInstance().writeToFile(context);
+                    changeData();
 
-                holder.isPlusTwo=false;
-                holder.plusTwo.setTextColor(Color.WHITE);
-                holder.plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
 
-                holder.isDNF=false;
-                holder.dnf.setTextColor(Color.WHITE);
-                holder.dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+
+
+
+
             }
         });
         holder.expand.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +156,15 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
             }
         });
 
+    }
+    public void changeData(){
+        ArrayList<Integer> changedData=new ArrayList<>();
+        for(Integer i:solveCodes){
+            if(i!=null){
+                changedData.add(i);
+            }
+        }
+        solveCodes=changedData;
     }
 
     @Override

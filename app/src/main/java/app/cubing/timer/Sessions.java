@@ -34,6 +34,13 @@ public class Sessions {
     public void editSession(Session s){
         sessionsMap.put(s.getName(),s);
     }
+    public void changeSessionName(String originalName,String changedName){
+        Session s=sessionsMap.get(originalName);
+        s.setName(changedName);
+        addSession(s);
+        sessionsMap.remove(originalName);
+
+    }
     public void writeToFile(Context context){
         try {
             FileOutputStream stream = context.openFileOutput("sessionsData.csv", Context.MODE_PRIVATE);

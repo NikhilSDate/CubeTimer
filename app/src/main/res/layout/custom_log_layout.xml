@@ -25,7 +25,7 @@
 
 
             <ImageView
-                android:id="@+id/session_type_image"
+                android:id="@+id/frag_session_type_image"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_marginStart="8dp"
@@ -39,7 +39,7 @@
                 app:srcCompat="@drawable/ic_2x2" />
 
             <TextView
-                android:id="@+id/session_name"
+                android:id="@+id/frag_session_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -51,11 +51,11 @@
                 android:textSize="28sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/session_type_image"
+                app:layout_constraintStart_toEndOf="@+id/frag_session_type_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/count"
+                android:id="@+id/frag_count"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -63,12 +63,12 @@
                 android:layout_marginBottom="4dp"
                 android:text="TextView"
                 android:textColor="@color/gray"
-                app:layout_constraintBottom_toTopOf="@+id/mean"
-                app:layout_constraintStart_toEndOf="@+id/session_type_image"
-                app:layout_constraintTop_toBottomOf="@+id/session_name" />
+                app:layout_constraintBottom_toTopOf="@+id/frag_mean"
+                app:layout_constraintStart_toEndOf="@+id/frag_session_type_image"
+                app:layout_constraintTop_toBottomOf="@+id/frag_session_name" />
 
             <TextView
-                android:id="@+id/ao12"
+                android:id="@+id/frag_ao12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -76,12 +76,12 @@
                 android:layout_marginBottom="4dp"
                 android:text="TextView"
                 android:textColor="@color/gray"
-                app:layout_constraintBottom_toTopOf="@+id/ao100"
+                app:layout_constraintBottom_toTopOf="@+id/frag_ao100"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/session_name" />
+                app:layout_constraintTop_toBottomOf="@+id/frag_session_name" />
 
             <TextView
-                android:id="@+id/mean"
+                android:id="@+id/frag_mean"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -89,10 +89,10 @@
                 android:text="TextView"
                 android:textColor="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/session_type_image" />
+                app:layout_constraintStart_toEndOf="@+id/frag_session_type_image" />
 
             <TextView
-                android:id="@+id/ao100"
+                android:id="@+id/frag_ao100"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -112,13 +112,13 @@
                 android:layout_marginBottom="4dp"
                 android:text="TextView"
                 android:textColor="@color/gray"
-                app:layout_constraintBottom_toTopOf="@+id/ao50"
-                app:layout_constraintEnd_toStartOf="@+id/ao12"
-                app:layout_constraintStart_toEndOf="@+id/count"
-                app:layout_constraintTop_toBottomOf="@+id/session_name" />
+                app:layout_constraintBottom_toTopOf="@+id/frag_ao50"
+                app:layout_constraintEnd_toStartOf="@+id/frag_ao12"
+                app:layout_constraintStart_toEndOf="@+id/frag_count"
+                app:layout_constraintTop_toBottomOf="@+id/frag_session_name" />
 
             <TextView
-                android:id="@+id/ao50"
+                android:id="@+id/frag_ao50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -127,8 +127,8 @@
                 android:text="TextView"
                 android:textColor="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ao100"
-                app:layout_constraintStart_toEndOf="@+id/mean" />
+                app:layout_constraintEnd_toStartOf="@+id/frag_ao100"
+                app:layout_constraintStart_toEndOf="@+id/frag_mean" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

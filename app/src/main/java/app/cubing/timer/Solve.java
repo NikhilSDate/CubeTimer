@@ -13,6 +13,7 @@ public class Solve {
         this.scramble=scramble;
 
     }
+    public Solve(){}
 
     public float getTime() {
         return time;

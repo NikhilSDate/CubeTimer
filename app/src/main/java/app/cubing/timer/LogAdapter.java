@@ -2,14 +2,12 @@ package app.cubing.timer;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -40,14 +38,14 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.sessionName = itemView.findViewById(R.id.session_name);
-            this.sessionType = itemView.findViewById(R.id.session_type_image);
-            this.count = itemView.findViewById(R.id.count);
+            this.sessionName = itemView.findViewById(R.id.frag_session_name);
+            this.sessionType = itemView.findViewById(R.id.frag_session_type_image);
+            this.count = itemView.findViewById(R.id.frag_count);
             this.ao5 = itemView.findViewById(R.id.ao5);
-            this.ao12 = itemView.findViewById(R.id.ao12);
-            this.ao50 = itemView.findViewById(R.id.ao50);
-            this.ao100 = itemView.findViewById(R.id.ao100);
-            this.mean = itemView.findViewById(R.id.mean);
+            this.ao12 = itemView.findViewById(R.id.frag_ao12);
+            this.ao50 = itemView.findViewById(R.id.frag_ao50);
+            this.ao100 = itemView.findViewById(R.id.frag_ao100);
+            this.mean = itemView.findViewById(R.id.frag_mean);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

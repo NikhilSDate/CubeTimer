@@ -32,6 +32,7 @@ public class SessionDetailsFragment extends Fragment {
     RecyclerView solves;
     Session currentSession;
     FloatingActionButton addSolve,delete;
+    Solve addedSolve;
 
     public SessionDetailsFragment(){
 
@@ -65,12 +66,7 @@ public class SessionDetailsFragment extends Fragment {
         delete=view.findViewById(R.id.delete_session);
 
         sessionName.setText(currentSession.getName());
-        count.setText("Size: "+String.valueOf(currentSession.getCount()));
-        ao5.setText("Ao5: "+Utils.formatTime((double)currentSession.getAo5()*1000,false));
-        ao12.setText("Ao12: "+Utils.formatTime((double)currentSession.getAo12()*1000,false));
-        ao50.setText("Ao50: "+Utils.formatTime((double)currentSession.getAo50()*1000,false));
-        ao100.setText("Ao100: "+Utils.formatTime((double)currentSession.getAo100()*1000,false));
-        mean.setText("Mean: "+Utils.formatTime((double)currentSession.getMean()*1000,false));
+
 
         sessionName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -95,12 +91,24 @@ public class SessionDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showAddSolveDialog();
+                currentSession.addSolve(addedSolve);
+                Sessions.getSingletonInstance().editSession(currentSession);
+                Sessions.getSingletonInstance().writeToFile(getContext());
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMetrics(true);
+                solves.removeAllViewsInLayout();
+                Sessions.getSingletonInstance().removeSession(currentSession.getName());
+                getFragmentManager().popBackStack();
             }
         });
 
 
     }
-    public Solve showAddSolveDialog(){
+    public void showAddSolveDialog(){
         final Solve solve=new Solve();
         final Dialog dialog=new Dialog(getContext());
         dialog.setContentView(R.layout.solve_builder_dialog);
@@ -136,6 +144,17 @@ public class SessionDetailsFragment extends Fragment {
                 String item =(String)parent.getItemAtPosition(position);
                 switch(item){
                     case "None":
+                        break;
+                    case "+2":
+                        solve.setPenalty(Solve.PENALTY_PLUSTWO);
+                        break;
+                    case "DNF":
+                        solve.setPenalty(Solve.PENALTY_DNF);
+                        break;
+                    default:
+                        break;
+
+
 
                 }
 
@@ -146,6 +165,32 @@ public class SessionDetailsFragment extends Fragment {
 
             }
         });
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addedSolve=solve;
+                dialog.dismiss();
 
+            }
+        });
+
+
+    }
+    public void setMetrics(boolean isDeleted){
+        if(!isDeleted){
+            count.setText("Size: "+String.valueOf(currentSession.getCount()));
+            ao5.setText("Ao5: "+Utils.formatTime((double)currentSession.getAo5()*1000,false));
+            ao12.setText("Ao12: "+Utils.formatTime((double)currentSession.getAo12()*1000,false));
+            ao50.setText("Ao50: "+Utils.formatTime((double)currentSession.getAo50()*1000,false));
+            ao100.setText("Ao100: "+Utils.formatTime((double)currentSession.getAo100()*1000,false));
+            mean.setText("Mean: "+Utils.formatTime((double)currentSession.getMean()*1000,false));
+        }else{
+            count.setText("");
+            ao5.setText("");
+            ao12.setText("");
+            ao50.setText("");
+            ao100.setText("");
+            mean.setText("");
+        }
     }
 }

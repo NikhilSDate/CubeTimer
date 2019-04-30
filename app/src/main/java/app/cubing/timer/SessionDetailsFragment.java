@@ -95,6 +95,7 @@ public class SessionDetailsFragment extends Fragment {
                 if(isDefault) {
                     SharedPreferences.Editor editor=getActivity().getPreferences(Context.MODE_PRIVATE).edit();
                     editor.putString("currentSession",s.toString());
+                    editor.apply();
                 }
                 currentSession.setName(s.toString());
                 Sessions.getSingletonInstance().changeSessionName(originalName,s.toString());

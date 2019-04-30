@@ -25,6 +25,9 @@ public class Solve {
     public String getScramble(){
         return this.scramble;
     }
+    public void setScramble(String scramble){
+        this.scramble=scramble;
+    }
 
 
 

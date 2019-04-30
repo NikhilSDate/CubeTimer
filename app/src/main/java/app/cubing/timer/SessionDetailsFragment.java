@@ -1,6 +1,9 @@
 package app.cubing.timer;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +35,8 @@ public class SessionDetailsFragment extends Fragment {
     RecyclerView solves;
     Session currentSession;
     FloatingActionButton addSolve,delete;
-    Solve addedSolve;
+    MaterialButton defaultButton;
+    boolean isDefault;
 
     public SessionDetailsFragment(){
 
@@ -50,6 +54,8 @@ public class SessionDetailsFragment extends Fragment {
     }
     public void initialize(View view){
         currentSession=Sessions.getSingletonInstance().getSessionsMap().get(getArguments().getString("session"));
+        SharedPreferences preferences=getActivity().getPreferences(Context.MODE_PRIVATE);
+        isDefault=currentSession.getName().equals(preferences.getString("currentSession",null));
         solves=view.findViewById(R.id.sessionSolves);
         SolveAdapter adapter=new SolveAdapter(new ArrayList<Integer>(currentSession.getSolvesMap().keySet()),currentSession.getName(),getContext());
         solves.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -64,6 +70,15 @@ public class SessionDetailsFragment extends Fragment {
         sessionName=view.findViewById(R.id.frag_session_name);
         addSolve=view.findViewById(R.id.add_solve);
         delete=view.findViewById(R.id.delete_session);
+        defaultButton=view.findViewById(R.id.session_default_button);
+        if(isDefault){
+            defaultButton.setText("DEFAULT \n SESSION");
+            defaultButton.setClickable(false);
+
+        }else{
+            defaultButton.setText("MAKE \n DEFAULT");
+            defaultButton.setClickable(true);
+        }
 
         sessionName.setText(currentSession.getName());
 
@@ -77,6 +92,10 @@ public class SessionDetailsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String originalName=currentSession.getName();
+                if(isDefault) {
+                    SharedPreferences.Editor editor=getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+                    editor.putString("currentSession",s.toString());
+                }
                 currentSession.setName(s.toString());
                 Sessions.getSingletonInstance().changeSessionName(originalName,s.toString());
                 Sessions.getSingletonInstance().writeToFile(getContext());
@@ -84,16 +103,12 @@ public class SessionDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
         addSolve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddSolveDialog();
-                currentSession.addSolve(addedSolve);
-                Sessions.getSingletonInstance().editSession(currentSession);
-                Sessions.getSingletonInstance().writeToFile(getContext());
             }
         });
         delete.setOnClickListener(new View.OnClickListener() {
@@ -101,8 +116,23 @@ public class SessionDetailsFragment extends Fragment {
             public void onClick(View v) {
                 setMetrics(true);
                 solves.removeAllViewsInLayout();
-                Sessions.getSingletonInstance().removeSession(currentSession.getName());
-                getFragmentManager().popBackStack();
+                if(isDefault){
+                    showDeleteDialog();
+                }else {
+                    Sessions.getSingletonInstance().removeSession(currentSession.getName());
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
+        defaultButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                SharedPreferences.Editor editor=
+                        getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+                editor.putString("currentSession",currentSession.getName());
+                editor.apply();
+                defaultButton.setText("DEFAULT \n SESSION");
+                defaultButton.setClickable(false);
             }
         });
 
@@ -110,6 +140,7 @@ public class SessionDetailsFragment extends Fragment {
     }
     public void showAddSolveDialog(){
         final Solve solve=new Solve();
+        solve.setScramble("");
         final Dialog dialog=new Dialog(getContext());
         dialog.setContentView(R.layout.solve_builder_dialog);
         dialog.setTitle("Add a solve");
@@ -129,7 +160,7 @@ public class SessionDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               solve.setTime(Integer.parseInt(s.toString()));
+               solve.setTime(Float.parseFloat(s.toString()));
 
             }
 
@@ -168,13 +199,29 @@ public class SessionDetailsFragment extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addedSolve=solve;
-                dialog.dismiss();
+                currentSession.addSolve(solve);
+                Sessions.getSingletonInstance().editSession(currentSession);
+                Sessions.getSingletonInstance().writeToFile(getContext());
+                SolveAdapter updatedAdapter =new SolveAdapter(new ArrayList<Integer>(
+                        currentSession.getSolvesMap().keySet()),currentSession.getName(),getContext());
+                solves.setAdapter(updatedAdapter);
 
             }
         });
 
 
+    }
+    public void showDeleteDialog(){
+        MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getContext());
+        builder.setTitle("Delete Session");
+        builder.setMessage("Cannot delete default session. Make another session default and try again");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
     public void setMetrics(boolean isDeleted){
         if(!isDeleted){

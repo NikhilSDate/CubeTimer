@@ -125,9 +125,8 @@ public class LogFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentPuzzleType=Utils.getPuzzleTypeFromInt((int)parent.getItemAtPosition(position));
-                sessionNames=Utils.getFilteredSessions(currentPuzzleType, search.getText().toString());
-                adapter.changeData(sessionNames);
-
+                adapter.changeData(Utils.getFilteredSessions(currentPuzzleType, search.getText().toString()));
+                adapter.notifyDataSetChanged();
 
             }
 

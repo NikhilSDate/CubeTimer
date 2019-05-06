@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -121,7 +122,8 @@ public class SessionDetailsFragment extends Fragment {
                     showDeleteDialog();
                 }else {
                     Sessions.getSingletonInstance().removeSession(currentSession.getName());
-                    getFragmentManager().popBackStack();
+                    Toast.makeText(getContext(),"Session deleted",Toast.LENGTH_SHORT).show();
+                    getFragmentManager().beginTransaction().replace(R.id.mainFrag,new LogFragment()).commit();
                 }
             }
         });

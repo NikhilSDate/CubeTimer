@@ -70,6 +70,7 @@ public class SessionDetailsFragment extends Fragment {
         ao100=view.findViewById(R.id.frag_ao100);
         sessionName=view.findViewById(R.id.frag_session_name);
         addSolve=view.findViewById(R.id.add_solve);
+        setMetrics(false);
         delete=view.findViewById(R.id.delete_session);
         defaultButton=view.findViewById(R.id.session_default_button);
         if(isDefault){
@@ -208,9 +209,11 @@ public class SessionDetailsFragment extends Fragment {
                 SolveAdapter updatedAdapter =new SolveAdapter(new ArrayList<Integer>(
                         currentSession.getSolvesMap().keySet()),currentSession.getName(),getContext());
                 solves.setAdapter(updatedAdapter);
+                dialog.dismiss();
 
             }
         });
+        dialog.show();
 
 
     }

@@ -49,6 +49,16 @@ public class SolveAdapter extends RecyclerView.Adapter<SolveAdapter.CustomViewHo
         holder.dnf.setVisibility(View.GONE);
         holder.delete.setVisibility(View.GONE);
 
+        switch(solve.getPenalty()){
+            case Solve.PENALTY_NONE:
+                holder.dnf.setTextColor(Color.WHITE);
+                holder.dnf.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                holder.plusTwo.setTextColor(Color.WHITE);
+                holder.plusTwo.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                holder.isDNF=false;
+                holder.isPlusTwo=false;
+        }
+
         holder.plusTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

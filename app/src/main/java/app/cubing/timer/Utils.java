@@ -6,7 +6,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import net.gnehzr.tnoodle.scrambles.Puzzle;
+import org.worldcubeassociation.tnoodle.scrambles.Puzzle;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,15 +17,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentManager;
-import puzzle.ClockPuzzle;
-import puzzle.CubePuzzle;
-import puzzle.FourByFourCubePuzzle;
-import puzzle.MegaminxPuzzle;
-import puzzle.PyraminxPuzzle;
-import puzzle.SkewbPuzzle;
-import puzzle.SquareOnePuzzle;
-import puzzle.ThreeByThreeCubePuzzle;
-import puzzle.TwoByTwoCubePuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.ClockPuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.ThreeByThreeCubePuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.FourByFourCubePuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.MegaminxPuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.PyraminxPuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.SkewbPuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.SquareOnePuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.CubePuzzle;
+import org.worldcubeassociation.tnoodle.puzzle.TwoByTwoCubePuzzle;
 
 public class Utils {
         public static String scramble(int puzzleType){
@@ -37,6 +37,7 @@ public class Utils {
 
                 case Session.TYPE_3X3:
                     Puzzle puzzle2 = new ThreeByThreeCubePuzzle();
+
                     return puzzle2.generateScramble();
 
                 case Session.TYPE_4X4:
